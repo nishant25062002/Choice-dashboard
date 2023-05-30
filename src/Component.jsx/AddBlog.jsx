@@ -2,11 +2,12 @@ import React, { useState } from 'react'
 import GenerateUrl from './GenerateUrl';
 import SubHeading from './SubHeading';
 import { Formik, Form, Field, FieldArray } from 'formik';
+import db from '../../firebase';
 
 
 const AddBlog = () => {
 
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
     const [page, setPage] = useState(true);
     const [blog, setblog] = useState([]);
     const [field, setField] = useState(1);
@@ -22,37 +23,46 @@ const AddBlog = () => {
     const [conclusion, setconclusion] = useState('');
     var today = new Date();
     var datetime = today.toLocaleString();
-
+    // setLoading(false)
     const sty = {
         'btn': " mt-3 mb-3  bg-pink-500 text-white active:bg-pink-600 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 ease-linear transition-all duration-150 w-40",
         'input': "border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150 "
     }
 
     const addBlog = () => {
-        db.collection("Blogs")
-            .doc('CETKwtvcv7juo1qDad2HGYM')
-            .collection("Blog")
-            .doc(title)
-            .set({
-                title:title,
-                subtitle:subtitle,
-                author:author,
-                img:img,
-                desc:desc,
-                address:address,
-                city:city,
-                country:country,
-                conclusion:conclusion,
-                blog:blog,
-                date:datetime,
-            })
-            .then(() => {
-
-            })
+        if (title && subtitle && author && img && desc && address && city && country && conclusion && blog && datetime) {
+            setLoading(true)
+            db.collection("Blogs")
+                .doc('CETKwtvcv7juo1qDad2HGYM')
+                .collection("Blog")
+                .doc(title)
+                .set({
+                    title: title,
+                    subtitle: subtitle,
+                    author: author,
+                    img: img,
+                    desc: desc,
+                    address: address,
+                    city: city,
+                    country: country,
+                    conclusion: conclusion,
+                    blog: blog,
+                    date: datetime,
+                })
+                .then(() => {
+                    alert("Congratulations!! Blog added.")
+                    setLoading(false);
+                })
+        }
     }
 
     return (
         <>
+            {
+                loading && <div className='fixed top-0 left-0 right-0  h-full w-full z-10 items-center justify-center flex' style={{ backgroundColor: "#514e4ede" }}>
+                    <h1 className='font-sans bold z-100 text-xl text-black'>Loading....</h1>
+                </div>
+            }
             <section className=" py-1 bg-blueGray-50">
                 <div className="w-full lg:w-8/12 px-4 mx-auto mt-6 bg-blueGray-50">
                     <div className="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded-lg bg-blueGray-100 border-0">
@@ -237,12 +247,18 @@ const AddBlog = () => {
                                     </div>
                                 </div>
                             </form>
+                            <div className="flex justify-center w-full lg:w-12/12 px-4">
+                                <button className={sty.btn} type="button" onClick={addBlog}>
+                                    Add Blog
+                                </button>
+                            </div>
                         </div>
                             :
                             <GenerateUrl />
                         }
 
                     </div>
+
                     <footer className="relative  pt-8 pb-6 mt-2">
                         <div className="container mx-auto px-4">
                             <div className="flex flex-wrap items-center md:justify-between justify-center">
