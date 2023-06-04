@@ -21,6 +21,7 @@ const AddBlog = () => {
     const [city, setcity] = useState('');
     const [country, setcountry] = useState('');
     const [conclusion, setconclusion] = useState('');
+    const [keywords, setkeywords] = useState('');
     var today = new Date();
     var datetime = today.toLocaleString();
     // setLoading(false)
@@ -48,6 +49,7 @@ const AddBlog = () => {
                     conclusion: conclusion,
                     blog: blog,
                     date: datetime,
+                    Keywords:keywords?keywords:"",
                 })
                 .then(() => {
                     alert("Congratulations!! Blog added.")
@@ -243,6 +245,16 @@ const AddBlog = () => {
                                         <div className="relative w-full mb-3">
 
                                             <textarea type="text" className={sty.input} rows="4" placeholder='Conclusion' value={conclusion} onChange={e => setconclusion(e.target.value)} />
+                                        </div>
+                                    </div>
+                                </div>
+                                <h6 className="text-blueGray-400 text-sm mt-3 mb-6 font-bold uppercase">
+                                Keywords
+                                </h6>
+                                <div className="flex flex-wrap">
+                                    <div className="w-full lg:w-12/12 px-4">
+                                        <div className="relative w-full mb-3">
+                                            <textarea type="text" className={sty.input} rows="4" placeholder='keywords' value={keywords} onChange={e => setkeywords(e.target.value)} />
                                         </div>
                                     </div>
                                 </div>
